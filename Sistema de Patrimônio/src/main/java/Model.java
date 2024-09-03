@@ -6,7 +6,9 @@ public class Model {
     private HashMap<String, Patrimonio> patrimoniosMap = new HashMap<>();
     private HashMap<String, Usuario> usuariosMap = new HashMap<>();
     private HashMap<String, RequisicaoDeManutencao> manutencoesMap = new HashMap<>();
-
+    private ArrayList<Usuario> listausuarios = new ArrayList<>();
+    private Usuario usuarioAutenticado;
+    
     // Métodos para adicionar dados
     public void adicionarBem(Bem bem) {
         bensMap.put(bem.getId(), bem);
@@ -18,6 +20,8 @@ public class Model {
 
     public void adicionarUsuario(Usuario usuario) {
         usuariosMap.put(usuario.getId(), usuario);
+        //adiciona o usuario na lista também, supostamente
+        listaUsuarios.add(usuario);
     }
 
     public void adicionarRequisicaoDeManutencao(RequisicaoDeManutencao requisicao) {
@@ -57,4 +61,36 @@ public class Model {
     public ArrayList<RequisicaoDeManutencao> listarManutencoes() {
         return new ArrayList<>(manutencoesMap.values());
     }
+//--------------------USUARIOS---------------------------------
+    public Usuario getusuario(String id){
+        return usuariosMap.get(id);
+    }
+    public void setUsuario(Usuario usuario){
+        if(usuario != null && usuariosMap.containsKey(usuario.getId())){
+            usuarioAutenticado = usuario;
+        }
+    }
+    public Arraylist<Usuario> getUsuarios(){
+        return listaUsuarios;
+    }
+    public Usuario getUsuarioAutenticado(){
+        return usuarioAutenticado;
+    }
+    public void adicionarUsuario(Usuario usuario) {
+        if (usuario != null && !usuariosMap.containsKey(usuario.getId())) {
+            usuariosMap.put(usuario.getId(), usuario);
+            listaUsuarios.add(usuario);
+        }
+    }
+    
+    public void excluirUsuario(Usuario usuario) {
+        if (usuario != null) {
+            usuariosMap.remove(usuario.getId());
+            listaUsuarios.remove(usuario);
+            if (usuario.equals(usuarioAutenticado)) {
+                usuarioAutenticado = null;
+            }
+        }
+    }
 }
+    
